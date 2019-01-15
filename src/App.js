@@ -1,28 +1,210 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react"
+
+import { Grid, Header, Input, List, Segment } from "semantic-ui-react"
+import { BrowserRouter as Router, Route, NavLink } from "react-router-dom"
+
+import Amplify, { API, graphqlOperation } from "aws-amplify"
+import { Connect, withAuthenticator } from "aws-amplify-react"
+
+import aws_exports from "./aws-exports"
+Amplify.configure(aws_exports)
+
+function makeComparator(key, order = "asc") {
+  return (a, b) => {
+    if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) return 0
+
+    const aVal = typeof a[key] === "string" ? a[key].toUpperCase() : a[key]
+    const bVal = typeof b[key] === "string" ? b[key].toUpperCase() : b[key]
+
+    let comparison = 0
+    if (aVal > bVal) comparison = 1
+    if (aVal < bVal) comparison = -1
+
+    return order === "desc" ? comparison * -1 : comparison
+  }
+}
+
+const ListAlbums = `
+  query ListAlbums {
+    listAlbums(limit: 9999) {
+      items {
+        id
+        name
+      }
+    }
+  }
+`
+
+const SubscribeToNewAlbums = `
+  subscription onCreateAlbum {
+    onCreateAlbum {
+      id
+      name
+    }
+  }
+`
+
+const GetAlbum = `
+  query GetAlbum($id: ID!) {
+    getAlbum(id: $id) {
+      id
+      name
+    }
+  }
+`
+
+const CreateAlbum = `
+  mutation NewAlbum($name: String!) {
+    createAlbum(input: {name: $name}) {
+      id
+      name
+    }
+  }
+`
+
+class NewAlbum extends Component {
+  state = {
+    albumName: ""
+  }
+
+  handleChange = event => {
+    let change = {}
+    change[event.target.name] = event.target.value
+    this.setState(change)
+  }
+
+  handleSubmit = async event => {
+    event.preventDefault()
+
+    const result = await API.graphql(
+      graphqlOperation(CreateAlbum, { name: this.state.albumName })
+    )
+    console.info(`Created album with id ${result.data.createAlbum.id}`)
+    this.setState({ albumName: "" })
+  }
+
+  render() {
+    return (
+      <Segment>
+        <Header as="h3">Add a new album</Header>
+        <Input
+          type="text"
+          placeholder="New Album Name"
+          icon="plus"
+          iconPosition="left"
+          action={{ content: "Create", onClick: this.handleSubmit }}
+          name="albumName"
+          value={this.state.albumName}
+          onChange={this.handleChange}
+        />
+      </Segment>
+    )
+  }
+}
+
+class AlbumsList extends Component {
+  albumItems() {
+    return this.props.albums.sort(makeComparator("name")).map(album => (
+      <List.Item key={album.id}>
+        <NavLink to={`/albums/${album.id}`}>{album.name}</NavLink>
+      </List.Item>
+    ))
+  }
+
+  render() {
+    return (
+      <Segment>
+        <Header as="h3">My Albums</Header>
+        <List divided relaxed>
+          {this.albumItems()}
+        </List>
+      </Segment>
+    )
+  }
+}
+
+class AlbumDetailsLoader extends Component {
+  render() {
+    return (
+      <Connect query={graphqlOperation(GetAlbum, {id: this.props.id})}>
+        {({data, loading}) => {
+          if (loading) {return <div>Loading...</div>}
+          if (!data.getAlbum) return
+          return <AlbumDetails album={data.getAlbum} />
+        }}
+      </Connect>
+    )
+  }
+}
+
+class AlbumDetails extends Component {
+  render() {
+    return (
+      <Segment>
+        <Header as='h3'>{this.props.album.name}</Header>
+        <p>TODO: Allow photo upload</p>
+        <p>TODO: Show photos for this album</p>
+      </Segment>
+    )
+  }
+}
+
+class AlbumsListLoader extends Component {
+  onNewAlbum = (prevQuery, newData) => {
+    // let updatedQuery = Object.assign({}, prevQuery)
+    // updatedQuery.listAlbums.items = prevQuery.listAlbums.items.concat([newData.onCreateAlbum])
+    // return updatedQuery
+    return {
+      ...prevQuery,
+      listAlbums: {
+        ...prevQuery.listAlbums,
+        items: [
+          ...prevQuery.listAlbums.items,
+          newData.onCreateAlbum
+        ]
+      }
+    }
+  }
+
+  render() {
+    return (
+      <Connect
+        query={graphqlOperation(ListAlbums)}
+        subscription={graphqlOperation(SubscribeToNewAlbums)}
+        onSubscriptionMsg={this.onNewAlbum}
+      >
+        {({data, loading}) => {
+          if (loading) {return <div>Loading...</div>}
+          if (!data.listAlbums) return
+          return <AlbumsList albums={data.listAlbums.items} />
+        }}
+      </Connect>
+    )
+  }
+}
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
+      <Router>
+        <Grid padded>
+          <Grid.Column>
+            <Route path="/" exact component={NewAlbum} />
+            <Route path="/" exact component={AlbumsListLoader} />
+
+            <Route
+              path="/albums/:albumId"
+              render={() => <div><NavLink to="/">Back to Albums list</NavLink></div>}
+            />
+            <Route
+              path="/albums/:albumId"
+              render={props => <AlbumDetailsLoader id={props.match.params.albumId} />}
+            />
+          </Grid.Column>
+        </Grid>
+      </Router>
+    )
   }
 }
 
-export default App;
+export default withAuthenticator(App, { includeGreetings: true })
