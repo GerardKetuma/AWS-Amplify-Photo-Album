@@ -161,6 +161,16 @@
 					"unauthPermissions": ""
 				}
 			}
+		},
+		"functionworkshopphotoprocessor": {
+			"Type": "AWS::CloudFormation::Stack",
+			"Properties": {
+				"TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/function/workshopphotoprocessor-cloudformation-template.json",
+				"Parameters": {
+					"S3UserfilesBucketName": "photoalbums0be9af16ceb24d0a90186f4fbc868abb",
+					"DynamoDBPhotosTableArn": "arn:aws:dynamodb:us-east-2:952553253660:table/Photo-c6izcdhb2zearlhcm6mrea5l2i"
+				}
+			}
 		}
 	},
 	"Outputs": {

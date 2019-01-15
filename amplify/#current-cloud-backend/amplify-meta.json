@@ -19,7 +19,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/auth/cognito8bd7beb1-cloudformation-template.yml",
 				"logicalId": "authcognito8bd7beb1"
 			},
-			"lastPushTimeStamp": "2019-01-15T05:35:07.932Z",
+			"lastPushTimeStamp": "2019-01-15T20:20:51.763Z",
 			"output": {
 				"AppClientSecret": "1r699acglqr6lfjh598earcqlr7743l8d4veblgmouuqdaupirus",
 				"UserPoolId": "us-east-2_wIMHQD594",
@@ -49,7 +49,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/api/cloudformation-template.json",
 				"logicalId": "apiphotoalbums"
 			},
-			"lastPushTimeStamp": "2019-01-15T05:35:07.939Z",
+			"lastPushTimeStamp": "2019-01-15T20:20:51.764Z",
 			"lastPushDirHash": "JMjUAsDWMCBTc/4KD+nN7YxjvJc="
 		}
 	},
@@ -61,12 +61,34 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/storage/s3-cloudformation-template.json",
 				"logicalId": "storagephotoalbumsstorage"
 			},
-			"lastPushTimeStamp": "2019-01-15T05:35:07.940Z",
+			"lastPushTimeStamp": "2019-01-15T20:20:51.770Z",
 			"output": {
 				"BucketName": "photoalbums0be9af16ceb24d0a90186f4fbc868abb",
 				"Region": "us-east-2"
 			},
-			"lastPushDirHash": "+I/YcgBkfv0WuMXcCjk07MtqQ4g="
+			"lastPushDirHash": "xM/dxAw0YDHCZ3aSdgpiYtR3g+A="
+		}
+	},
+	"function": {
+		"workshopphotoprocessor": {
+			"service": "Lambda",
+			"providerPlugin": "awscloudformation",
+			"build": true,
+			"dependsOn": [],
+			"lastBuildTimeStamp": "2019-01-15T19:31:07.783Z",
+			"lastPackageTimeStamp": "2019-01-15T20:14:40.332Z",
+			"distZipFilename": "workshopphotoprocessor-1547583278-latest-build.zip",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/function/workshopphotoprocessor-cloudformation-template.json",
+				"logicalId": "functionworkshopphotoprocessor"
+			},
+			"lastPushTimeStamp": "2019-01-15T20:20:51.772Z",
+			"output": {
+				"Region": "us-east-2",
+				"Arn": "arn:aws:lambda:us-east-2:952553253660:function:workshopphotoprocessor",
+				"Name": "workshopphotoprocessor"
+			},
+			"lastPushDirHash": "Tx49zoG/UHGdoYHg3WCOf+pKBkM="
 		}
 	}
 }
