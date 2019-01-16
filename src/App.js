@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 
 import {
+  Container,
   Divider,
   Form,
   Grid,
   Header,
   Input,
   List,
+  Modal,
   Segment,
 } from 'semantic-ui-react'
 import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom'
@@ -62,6 +64,11 @@ const GetAlbum = `
         nextToken
         items {
           thumbnail {
+            width
+            height
+            key
+          }
+          fullsize {
             width
             height
             key
@@ -211,12 +218,21 @@ class S3ImageUpload extends Component {
 }
 
 class PhotosList extends Component {
+  state = {
+    selectedPhoto: null,
+  }
+
+  handlePhotoClick = photo => this.setState({ selectedPhoto: photo })
+
+  handleLightboxClose = () => this.setState({ selectedPhoto: null })
+
   photoItems() {
     return this.props.photos.map(photo => (
       <S3Image
         key={photo.thumbnail.key}
         imgKey={photo.thumbnail.key.replace('public/', '')}
         style={{ display: 'inline-block', paddingRight: '5px' }}
+        onClick={this.handlePhotoClick.bind(this, photo.fullsize)}
       />
     ))
   }
@@ -226,6 +242,10 @@ class PhotosList extends Component {
       <div>
         <Divider hidden />
         {this.photoItems()}
+        <Lightbox
+          photo={this.state.selectedPhoto}
+          onClose={this.handleLightboxClose}
+        />
       </div>
     )
   }
@@ -340,6 +360,26 @@ class AlbumDetailsLoader extends Component {
         loadMorePhotos={this.loadMorePhotos.bind(this)}
         hasMorePhotos={this.state.hasMorePhotos}
       />
+    )
+  }
+}
+
+class Lightbox extends Component {
+  render() {
+    return (
+      <Modal open={this.props.photo !== null} onClose={this.props.onClose}>
+        <Modal.Content>
+          <Container textAlign="center">
+            {this.props.photo ? (
+              <S3Image
+                imgKey={this.props.photo.key.replace('public/', '')}
+                theme={{ photoImg: { maxWidth: '100%' } }}
+                onClick={this.props.onClose}
+              />
+            ) : null}
+          </Container>
+        </Modal.Content>
+      </Modal>
     )
   }
 }

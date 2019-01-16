@@ -19,7 +19,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/auth/cognito8bd7beb1-cloudformation-template.yml",
 				"logicalId": "authcognito8bd7beb1"
 			},
-			"lastPushTimeStamp": "2019-01-16T00:35:09.369Z",
+			"lastPushTimeStamp": "2019-01-16T06:31:33.419Z",
 			"output": {
 				"AppClientSecret": "1r699acglqr6lfjh598earcqlr7743l8d4veblgmouuqdaupirus",
 				"UserPoolId": "us-east-2_wIMHQD594",
@@ -49,7 +49,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/api/cloudformation-template.json",
 				"logicalId": "apiphotoalbums"
 			},
-			"lastPushTimeStamp": "2019-01-16T00:35:09.378Z",
+			"lastPushTimeStamp": "2019-01-16T06:31:33.420Z",
 			"lastPushDirHash": "4LeSKryf6zMJv9B+ysUSOZ1O8hQ="
 		}
 	},
@@ -61,7 +61,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/storage/s3-cloudformation-template.json",
 				"logicalId": "storagephotoalbumsstorage"
 			},
-			"lastPushTimeStamp": "2019-01-16T00:35:09.376Z",
+			"lastPushTimeStamp": "2019-01-16T06:31:33.421Z",
 			"output": {
 				"BucketName": "photoalbums0be9af16ceb24d0a90186f4fbc868abb",
 				"Region": "us-east-2"
@@ -82,13 +82,31 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/function/workshopphotoprocessor-cloudformation-template.json",
 				"logicalId": "functionworkshopphotoprocessor"
 			},
-			"lastPushTimeStamp": "2019-01-16T00:35:09.377Z",
+			"lastPushTimeStamp": "2019-01-16T06:31:33.421Z",
 			"output": {
 				"Region": "us-east-2",
 				"Arn": "arn:aws:lambda:us-east-2:952553253660:function:workshopphotoprocessor",
 				"Name": "workshopphotoprocessor"
 			},
 			"lastPushDirHash": "uvwdmXG8i99+NBXQxtAT0YUSuT0="
+		}
+	},
+	"hosting": {
+		"S3AndCloudFront": {
+			"service": "S3AndCloudFront",
+			"providerPlugin": "awscloudformation",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/hosting/template.json",
+				"logicalId": "hostingS3AndCloudFront"
+			},
+			"lastPushTimeStamp": "2019-01-16T06:31:33.422Z",
+			"output": {
+				"S3BucketSecureURL": "https://photoalbums-20190116002958-hostingbucket.s3.amazonaws.com",
+				"WebsiteURL": "http://photoalbums-20190116002958-hostingbucket.s3-website.us-east-2.amazonaws.com",
+				"Region": "us-east-2",
+				"HostingBucketName": "photoalbums-20190116002958-hostingbucket"
+			},
+			"lastPushDirHash": "lgdjix1lCFG+0MfgWlyVu7Ib0Jk="
 		}
 	}
 }
