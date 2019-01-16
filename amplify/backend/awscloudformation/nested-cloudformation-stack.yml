@@ -140,10 +140,12 @@
 							"Outputs.UserPoolId"
 						]
 					},
-					"schemaGraphql": "s3://photoalbums-20190108165859-deployment/amplify-appsync-files/schema.graphql.1547004843229",
+					"ElasticSearchStreamingLambdaCodeS3Key": "amplify-appsync-files/python_streaming_function.zip",
+					"ElasticSearchStreamingLambdaCodeS3Bucket": "photoalbums-20190108165859-deployment",
+					"schemaGraphql": "s3://photoalbums-20190108165859-deployment/amplify-appsync-files/schema.graphql.1547598300147",
 					"ResolverBucket": "photoalbums-20190108165859-deployment",
 					"ResolverRootKey": "amplify-appsync-files",
-					"DeploymentTimestamp": "1547004843229"
+					"DeploymentTimestamp": "1547598300147"
 				}
 			}
 		},

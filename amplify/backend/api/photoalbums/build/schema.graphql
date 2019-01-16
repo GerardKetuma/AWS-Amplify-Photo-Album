@@ -10,6 +10,7 @@ type Photo {
   bucket: String!
   fullsize: PhotoS3Info!
   thumbnail: PhotoS3Info!
+  labels: [String!]
 }
 
 type PhotoS3Info {
@@ -96,6 +97,7 @@ type Query {
   listAlbums(filter: ModelAlbumFilterInput, limit: Int, nextToken: String): ModelAlbumConnection
   getPhoto(id: ID!): Photo
   listPhotos(filter: ModelPhotoFilterInput, limit: Int, nextToken: String): ModelPhotoConnection
+  searchPhotos(filter: SearchablePhotoFilterInput, sort: SearchablePhotoSortInput, limit: Int, nextToken: Int): SearchablePhotoConnection
 }
 
 input CreateAlbumInput {
@@ -144,6 +146,7 @@ type ModelPhotoConnection {
 input ModelPhotoFilterInput {
   id: ModelIDFilterInput
   bucket: ModelStringFilterInput
+  labels: ModelStringFilterInput
   and: [ModelPhotoFilterInput]
   or: [ModelPhotoFilterInput]
   not: ModelPhotoFilterInput
@@ -154,6 +157,7 @@ input CreatePhotoInput {
   bucket: String!
   fullsize: PhotoS3InfoInput!
   thumbnail: PhotoS3InfoInput!
+  labels: [String!]
   photoAlbumId: ID
 }
 
@@ -162,9 +166,89 @@ input UpdatePhotoInput {
   bucket: String
   fullsize: PhotoS3InfoInput
   thumbnail: PhotoS3InfoInput
+  labels: [String!]
   photoAlbumId: ID
 }
 
 input DeletePhotoInput {
   id: ID
+}
+
+input SearchableStringFilterInput {
+  ne: String
+  eq: String
+  match: String
+  matchPhrase: String
+  matchPhrasePrefix: String
+  multiMatch: String
+  exists: Boolean
+  wildcard: String
+  regexp: String
+}
+
+input SearchableIDFilterInput {
+  ne: ID
+  eq: ID
+  match: ID
+  matchPhrase: ID
+  matchPhrasePrefix: ID
+  multiMatch: ID
+  exists: Boolean
+  wildcard: ID
+  regexp: ID
+}
+
+input SearchableIntFilterInput {
+  ne: Int
+  gt: Int
+  lt: Int
+  gte: Int
+  lte: Int
+  eq: Int
+  range: [Int]
+}
+
+input SearchableFloatFilterInput {
+  ne: Float
+  gt: Float
+  lt: Float
+  gte: Float
+  lte: Float
+  eq: Float
+  range: [Float]
+}
+
+input SearchableBooleanFilterInput {
+  eq: Boolean
+  ne: Boolean
+}
+
+input SearchablePhotoFilterInput {
+  id: SearchableIDFilterInput
+  bucket: SearchableStringFilterInput
+  labels: SearchableStringFilterInput
+  and: [SearchablePhotoFilterInput]
+  or: [SearchablePhotoFilterInput]
+  not: SearchablePhotoFilterInput
+}
+
+enum SearchableSortDirection {
+  asc
+  desc
+}
+
+enum SearchablePhotoSortableFields {
+  id
+  bucket
+  labels
+}
+
+input SearchablePhotoSortInput {
+  field: SearchablePhotoSortableFields
+  direction: SearchableSortDirection
+}
+
+type SearchablePhotoConnection {
+  items: [Photo]
+  nextToken: String
 }

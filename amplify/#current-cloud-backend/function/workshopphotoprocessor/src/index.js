@@ -1,7 +1,8 @@
-// amplify/backend/function/workshopphotoprocessor/src/index.js
+// photo-albums/amplify/backend/function/workshopphotoprocessor/src/index.js
 
 const AWS = require('aws-sdk')
 const S3 = new AWS.S3({ signatureVersion: 'v4' })
+const Rekognition = new AWS.Rekognition()
 const DynamoDBDocClient = new AWS.DynamoDB.DocumentClient({
   apiVersion: '2012-08-10',
 })
@@ -23,6 +24,22 @@ const THUMBNAIL_HEIGHT = parseInt(process.env.THUMBNAIL_HEIGHT, 10)
 const DYNAMODB_PHOTOS_TABLE_NAME = process.env.DYNAMODB_PHOTOS_TABLE_ARN.split(
   '/'
 )[1]
+
+async function getLabelNames(bucketName, key) {
+  let params = {
+    Image: {
+      S3Object: {
+        Bucket: bucketName,
+        Name: key,
+      },
+    },
+    MaxLabels: 50,
+    MinConfidence: 70,
+  }
+  const detectionResult = await Rekognition.detectLabels(params).promise()
+  const labelNames = detectionResult.Labels.map(l => l.Name.toLowerCase())
+  return labelNames
+}
 
 function storePhotoInfo(item) {
   const params = {
@@ -108,10 +125,12 @@ async function processRecord(record) {
 
   const metadata = await getMetadata(bucketName, key)
   const sizes = await resize(bucketName, key)
+  const labelNames = await getLabelNames(bucketName, sizes.fullsize.key)
   const id = uuidv4()
   const item = {
     id: id,
     owner: metadata.owner,
+    labels: labelNames,
     photoAlbumId: metadata.albumid,
     bucket: bucketName,
     thumbnail: sizes.thumbnail,
