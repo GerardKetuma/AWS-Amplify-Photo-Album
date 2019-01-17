@@ -1,0 +1,112 @@
+{
+	"providers": {
+		"awscloudformation": {
+			"AuthRoleName": "photoalbums-20190108165859-authRole",
+			"UnauthRoleArn": "arn:aws:iam::952553253660:role/photoalbums-20190108165859-unauthRole",
+			"AuthRoleArn": "arn:aws:iam::952553253660:role/photoalbums-20190108165859-authRole",
+			"Region": "us-east-2",
+			"DeploymentBucketName": "photoalbums-20190108165859-deployment",
+			"UnauthRoleName": "photoalbums-20190108165859-unauthRole",
+			"StackName": "photoalbums-20190108165859",
+			"StackId": "arn:aws:cloudformation:us-east-2:952553253660:stack/photoalbums-20190108165859/fc69ce20-1398-11e9-8ca5-02c65bf75a14"
+		}
+	},
+	"auth": {
+		"cognito8bd7beb1": {
+			"service": "Cognito",
+			"providerPlugin": "awscloudformation",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/auth/cognito8bd7beb1-cloudformation-template.yml",
+				"logicalId": "authcognito8bd7beb1"
+			},
+			"lastPushTimeStamp": "2019-01-17T19:51:30.044Z",
+			"output": {
+				"AppClientSecret": "1r699acglqr6lfjh598earcqlr7743l8d4veblgmouuqdaupirus",
+				"UserPoolId": "us-east-2_wIMHQD594",
+				"AppClientIDWeb": "2n34blsrt2bu3pnv7k3o6m4rf8",
+				"AppClientID": "5k2fv5qfon7sfssi23b6jdc4a2",
+				"IdentityPoolId": "us-east-2:59653459-03d2-450e-b659-70cf48a70b84",
+				"IdentityPoolName": "cognito8bd7beb1_identitypool_8bd7beb1",
+				"UserPoolName": "cognito8bd7beb1_userpool_8bd7beb1"
+			},
+			"lastPushDirHash": "gNrFHLwyXpkSzhpvKMLFT2I3OM4="
+		}
+	},
+	"api": {
+		"photoalbums": {
+			"service": "AppSync",
+			"providerPlugin": "awscloudformation",
+			"output": {
+				"securityType": "AMAZON_COGNITO_USER_POOLS",
+				"GraphQLAPIIdOutput": "c6izcdhb2zearlhcm6mrea5l2i",
+				"GraphQLAPIEndpointOutput": "https://4wenrdbqqncezlrbelfgqp5qi4.appsync-api.us-east-2.amazonaws.com/graphql",
+				"GraphQLAPIKeyOutput": "da2-7l62ocfuibcc7ellxowocq34zm",
+				"AuthCognitoUserPoolIdOutput": "us-east-2_wIMHQD594",
+				"AuthCognitoUserPoolNativeClientId": "See UserPool: us-east-2_wIMHQD594",
+				"AuthCognitoUserPoolJSClientId": "See UserPool: us-east-2_wIMHQD594"
+			},
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+				"logicalId": "apiphotoalbums"
+			},
+			"lastPushTimeStamp": "2019-01-17T19:51:30.051Z",
+			"lastPushDirHash": "AUzS11cn0NMUB/6ScCfrosCmSK8="
+		}
+	},
+	"storage": {
+		"photoalbumsstorage": {
+			"service": "S3",
+			"providerPlugin": "awscloudformation",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/storage/s3-cloudformation-template.json",
+				"logicalId": "storagephotoalbumsstorage"
+			},
+			"lastPushTimeStamp": "2019-01-17T19:51:30.048Z",
+			"output": {
+				"BucketName": "photoalbums0be9af16ceb24d0a90186f4fbc868abb",
+				"Region": "us-east-2"
+			},
+			"lastPushDirHash": "xM/dxAw0YDHCZ3aSdgpiYtR3g+A="
+		}
+	},
+	"function": {
+		"workshopphotoprocessor": {
+			"service": "Lambda",
+			"providerPlugin": "awscloudformation",
+			"build": true,
+			"dependsOn": [],
+			"lastBuildTimeStamp": "2019-01-15T19:31:07.783Z",
+			"lastPackageTimeStamp": "2019-01-15T22:55:48.047Z",
+			"distZipFilename": "workshopphotoprocessor-1547592945-latest-build.zip",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/function/workshopphotoprocessor-cloudformation-template.json",
+				"logicalId": "functionworkshopphotoprocessor"
+			},
+			"lastPushTimeStamp": "2019-01-17T19:51:30.049Z",
+			"output": {
+				"Region": "us-east-2",
+				"Arn": "arn:aws:lambda:us-east-2:952553253660:function:workshopphotoprocessor",
+				"Name": "workshopphotoprocessor"
+			},
+			"lastPushDirHash": "uvwdmXG8i99+NBXQxtAT0YUSuT0="
+		}
+	},
+	"hosting": {
+		"S3AndCloudFront": {
+			"service": "S3AndCloudFront",
+			"providerPlugin": "awscloudformation",
+			"providerMetadata": {
+				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/hosting/template.json",
+				"logicalId": "hostingS3AndCloudFront"
+			},
+			"lastPushTimeStamp": "2019-01-17T19:51:30.050Z",
+			"output": {
+				"S3BucketSecureURL": "https://photoalbums-20190116002958-hostingbucket.s3.amazonaws.com",
+				"WebsiteURL": "http://photoalbums-20190116002958-hostingbucket.s3-website.us-east-2.amazonaws.com",
+				"Region": "us-east-2",
+				"HostingBucketName": "photoalbums-20190116002958-hostingbucket"
+			},
+			"lastPushDirHash": "lgdjix1lCFG+0MfgWlyVu7Ib0Jk="
+		}
+	}
+}
