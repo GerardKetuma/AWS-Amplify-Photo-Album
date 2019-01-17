@@ -19,7 +19,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/auth/cognito8bd7beb1-cloudformation-template.yml",
 				"logicalId": "authcognito8bd7beb1"
 			},
-			"lastPushTimeStamp": "2019-01-16T06:31:33.419Z",
+			"lastPushTimeStamp": "2019-01-17T19:51:30.044Z",
 			"output": {
 				"AppClientSecret": "1r699acglqr6lfjh598earcqlr7743l8d4veblgmouuqdaupirus",
 				"UserPoolId": "us-east-2_wIMHQD594",
@@ -49,8 +49,8 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/api/cloudformation-template.json",
 				"logicalId": "apiphotoalbums"
 			},
-			"lastPushTimeStamp": "2019-01-16T06:31:33.420Z",
-			"lastPushDirHash": "4LeSKryf6zMJv9B+ysUSOZ1O8hQ="
+			"lastPushTimeStamp": "2019-01-17T19:51:30.051Z",
+			"lastPushDirHash": "AUzS11cn0NMUB/6ScCfrosCmSK8="
 		}
 	},
 	"storage": {
@@ -61,7 +61,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/storage/s3-cloudformation-template.json",
 				"logicalId": "storagephotoalbumsstorage"
 			},
-			"lastPushTimeStamp": "2019-01-16T06:31:33.421Z",
+			"lastPushTimeStamp": "2019-01-17T19:51:30.048Z",
 			"output": {
 				"BucketName": "photoalbums0be9af16ceb24d0a90186f4fbc868abb",
 				"Region": "us-east-2"
@@ -82,7 +82,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/function/workshopphotoprocessor-cloudformation-template.json",
 				"logicalId": "functionworkshopphotoprocessor"
 			},
-			"lastPushTimeStamp": "2019-01-16T06:31:33.421Z",
+			"lastPushTimeStamp": "2019-01-17T19:51:30.049Z",
 			"output": {
 				"Region": "us-east-2",
 				"Arn": "arn:aws:lambda:us-east-2:952553253660:function:workshopphotoprocessor",
@@ -99,7 +99,7 @@
 				"s3TemplateURL": "https://s3.amazonaws.com/photoalbums-20190108165859-deployment/amplify-cfn-templates/hosting/template.json",
 				"logicalId": "hostingS3AndCloudFront"
 			},
-			"lastPushTimeStamp": "2019-01-16T06:31:33.422Z",
+			"lastPushTimeStamp": "2019-01-17T19:51:30.050Z",
 			"output": {
 				"S3BucketSecureURL": "https://photoalbums-20190116002958-hostingbucket.s3.amazonaws.com",
 				"WebsiteURL": "http://photoalbums-20190116002958-hostingbucket.s3-website.us-east-2.amazonaws.com",

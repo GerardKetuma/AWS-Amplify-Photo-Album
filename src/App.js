@@ -6,6 +6,7 @@ import {
   Form,
   Grid,
   Header,
+  Icon,
   Input,
   List,
   Modal,
@@ -14,7 +15,7 @@ import {
 import { BrowserRouter as Router, Route, NavLink } from 'react-router-dom'
 import { v4 as uuid } from 'uuid'
 
-import Amplify, { API, graphqlOperation, Storage } from 'aws-amplify'
+import Amplify, { API, Auth, graphqlOperation, Storage } from 'aws-amplify'
 import { Connect, S3Image, withAuthenticator } from 'aws-amplify-react'
 
 import aws_exports from './aws-exports'
@@ -55,11 +56,24 @@ const SubscribeToNewAlbums = `
   }
 `
 
+const SubscribeToUpdateAlbums = `
+  subscription OnUpdateAlbum {
+    onUpdateAlbum {
+      id
+      name
+      owner
+      members
+    }
+  }
+`
+
 const GetAlbum = `
   query GetAlbum($id: ID!, $nextTokenForPhotos: String) {
     getAlbum(id: $id) {
       id
       name
+      owner
+      members
       photos(sortDirection: DESC, nextToken: $nextTokenForPhotos) {
         nextToken
         items {
@@ -350,6 +364,23 @@ class AlbumDetailsLoader extends Component {
 
   componentDidMount() {
     this.loadMorePhotos()
+
+    const subscription = API.graphql(
+      graphqlOperation(SubscribeToUpdateAlbums)
+    ).subscribe({
+      next: update => {
+        const album = update.value.data.onUpdateAlbum
+        this.setState({
+          album: { ...this.state.album, ...album },
+        })
+      },
+    })
+
+    this.setState({ albumUpdatesSubscription: subscription })
+  }
+
+  componentWillUnmount() {
+    this.state.albumUpdatesSubscription.unsubscribe()
   }
 
   render() {
@@ -385,12 +416,27 @@ class Lightbox extends Component {
 }
 
 class AlbumDetails extends Component {
+  async componentDidMount() {
+    this.setState({ currentUser: await Auth.currentAuthenticatedUser() })
+  }
   render() {
     if (!this.props.album) return 'Loading Album...'
 
     return (
       <Segment>
         <Header as="h3">{this.props.album.name}</Header>
+
+        {this.state.currentUser.username === this.props.album.owner && (
+          <Segment.Group>
+            <Segment>
+              <AlbumMembers members={this.props.album.members} />
+            </Segment>
+            <Segment basic>
+              <AddUsernameToAlbum albumId={this.props.album.id} />
+            </Segment>
+          </Segment.Group>
+        )}
+
         <S3ImageUpload albumId={this.props.album.id} />
         <PhotosList photos={this.props.album.photos.items} />
         {this.props.hasMorePhotos && (
@@ -440,6 +486,81 @@ class AlbumsListLoader extends Component {
     )
   }
 }
+
+class AddUsernameToAlbum extends Component {
+  state = { username: '' }
+
+  handleChange = (e, { name, value }) => this.setState({ [name]: value })
+
+  handleSubmit = async event => {
+    event.preventDefault()
+
+    const { data } = await API.graphql(
+      graphqlOperation(GetAlbum, { id: this.props.albumId })
+    )
+
+    let updatedAlbum = data.getAlbum
+    const updatedMembers = (data.getAlbum.members || []).concat([
+      this.state.username,
+    ])
+    updatedAlbum.members = updatedMembers
+    const { id, name, owner, members } = updatedAlbum
+    const updatedAlbumInput = { id, name, owner, members }
+
+    const UpdateAlbum = `
+      mutation UpdateAlbum($input: UpdateAlbumInput!) {
+        updateAlbum(input: $input) {
+          id
+          members
+        }
+      }
+    `
+
+    const result = await API.graphql(
+      graphqlOperation(UpdateAlbum, { input: updatedAlbumInput })
+    )
+
+    console.log(
+      `Added ${this.state.username} to album id ${result.data.updateAlbum.id}`
+    )
+
+    this.setState({ username: '' })
+  }
+
+  render() {
+    return (
+      <Input
+        type="text"
+        placeholder="Username"
+        icon="user plus"
+        iconPosition="left"
+        action={{ content: 'Add', onClick: this.handleSubmit }}
+        name="username"
+        value={this.state.username}
+        onChange={this.handleChange}
+      />
+    )
+  }
+}
+
+const AlbumMembers = props => (
+  <div>
+    <Header as="h4">
+      <Icon name="user circle" />
+      <Header.Content>Members</Header.Content>
+    </Header>
+    {props.members ? (
+      <List bulleted>
+        {props.members &&
+          props.members.map(member => (
+            <List.Item key={member}>{member}</List.Item>
+          ))}
+      </List>
+    ) : (
+      'No members yet (besides you). Invite someone below!'
+    )}
+  </div>
+)
 
 class App extends Component {
   render() {

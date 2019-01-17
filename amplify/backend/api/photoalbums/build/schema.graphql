@@ -1,6 +1,8 @@
 type Album {
   id: ID!
   name: String!
+  owner: String
+  members: [String]
   photos(filter: ModelPhotoFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelPhotoConnection
 }
 
@@ -87,6 +89,8 @@ input ModelBooleanFilterInput {
 input ModelAlbumFilterInput {
   id: ModelIDFilterInput
   name: ModelStringFilterInput
+  owner: ModelStringFilterInput
+  members: ModelStringFilterInput
   and: [ModelAlbumFilterInput]
   or: [ModelAlbumFilterInput]
   not: ModelAlbumFilterInput
@@ -103,11 +107,15 @@ type Query {
 input CreateAlbumInput {
   id: ID
   name: String!
+  owner: String
+  members: [String]
 }
 
 input UpdateAlbumInput {
   id: ID!
   name: String
+  owner: String
+  members: [String]
 }
 
 input DeleteAlbumInput {
